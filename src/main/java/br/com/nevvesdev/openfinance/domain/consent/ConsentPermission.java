@@ -1,0 +1,10 @@
+package br.com.nevvesdev.openfinance.domain.consent;
+
+public enum ConsentPermission {
+    ACCOUNTS_READ,
+    ACCOUNTS_BALANCES_READ,
+    ACCOUNTS_TRANSACTIONS_READ,
+    CREDIT_CARDS_ACCOUNTS_READ,
+    CREDIT_CARDS_ACCOUNTS_BILLS_READ,
+    CREDIT_CARDS_ACCOUNTS_TRANSACTIONS_READ
+}
