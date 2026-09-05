@@ -4,8 +4,11 @@ import br.com.nevvesdev.openfinance.adapter.out.persistence.mapper.ConsentMapper
 import br.com.nevvesdev.openfinance.adapter.out.persistence.repository.ConsentJpaRepository;
 import br.com.nevvesdev.openfinance.domain.consent.Consent;
 import br.com.nevvesdev.openfinance.domain.consent.ConsentRepository;
+import br.com.nevvesdev.openfinance.domain.consent.ConsentStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,5 +33,18 @@ public class ConsentRepositoryAdapter implements ConsentRepository {
     @Override
     public Optional<Consent> findById(UUID id) {
         return jpaRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Consent> findExpirable(OffsetDateTime now) {
+        var terminalStatuses = List.of(
+                ConsentStatus.EXPIRED,
+                ConsentStatus.REVOKED,
+                ConsentStatus.REJECTED
+        );
+        return jpaRepository.findExpirable(now, terminalStatuses)
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

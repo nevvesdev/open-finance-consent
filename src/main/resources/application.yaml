@@ -1,6 +1,10 @@
 spring:
   application:
     name: open-finance-consent
+  task:
+    scheduling:
+      enabled: true
+
 
   datasource:
     url: jdbc:postgresql://localhost:5432/openfinance
@@ -29,3 +33,10 @@ logging:
   level:
     br.com.nevvesdev: DEBUG
     org.springframework.security: INFO
+
+jobs:
+    expire-consents:
+      delay-ms: 60000
+    outbox-relay:
+      delay-ms: 30000
+
