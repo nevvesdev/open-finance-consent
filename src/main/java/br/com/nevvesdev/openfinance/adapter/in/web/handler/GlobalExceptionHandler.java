@@ -6,7 +6,8 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import java.net.URI;
 
 @RestControllerAdvice
@@ -27,6 +28,22 @@ public class GlobalExceptionHandler {
         problem.setTitle("Validation Error");
         problem.setProperty("errors", ex.getBindingResult().getFieldErrors()
                 .stream().map(f -> f.getField() + ": " + f.getDefaultMessage()).toList());
+        return problem;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ProblemDetail handleAccessDenied(AccessDeniedException ex) {
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Insufficient scope");
+        problem.setType(URI.create("https://openfinance.nevvesdev.com.br/errors/forbidden"));
+        problem.setTitle("Forbidden");
+        return problem;
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ProblemDetail handleAuthentication(AuthenticationException ex) {
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid or missing token");
+        problem.setType(URI.create("https://openfinance.nevvesdev.com.br/errors/unauthorized"));
+        problem.setTitle("Unauthorized");
         return problem;
     }
 }

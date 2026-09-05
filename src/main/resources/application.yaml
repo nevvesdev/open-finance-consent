@@ -1,20 +1,17 @@
 spring:
   application:
-    name: open-finance-consent
-  task:
-    scheduling:
-      enabled: true
-
+    name: open-finance-consent-hub
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/openfinance
-    username: openfinance
-    password: openfinance123
-    driver-class-name: org.postgresql.Driver
+    # Use in-memory H2 by default for local testing to avoid requiring a local Postgres instance
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
@@ -22,21 +19,41 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
-    enabled: true
+    # disabled by default in local test mode
+    enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:certs/jwt-public.pem
+
+  task:
+    scheduling:
+      enabled: true
+
 server:
   port: 8080
+  ssl:
+    enabled: true
+    key-store: classpath:certs/server.p12
+    key-store-password: openfinance123
+    key-store-type: PKCS12
+    key-alias: openfinance
+    trust-store: classpath:certs/truststore.p12
+    trust-store-password: openfinance123
+    trust-store-type: PKCS12
+    client-auth: want
+
+jobs:
+  expire-consents:
+    delay-ms: 60000
+  outbox-relay:
+    delay-ms: 30000
 
 logging:
   level:
     br.com.nevvesdev: DEBUG
-    org.springframework.security: INFO
-
-jobs:
-    expire-consents:
-      delay-ms: 60000
-    outbox-relay:
-      delay-ms: 30000
-
+    org.springframework.security: DEBUG

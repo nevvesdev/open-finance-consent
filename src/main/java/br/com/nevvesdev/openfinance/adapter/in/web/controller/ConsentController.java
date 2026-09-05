@@ -8,6 +8,8 @@ import br.com.nevvesdev.openfinance.application.consent.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.UUID;
 
@@ -38,9 +40,13 @@ public class ConsentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ConsentResponse create(@Valid @RequestBody CreateConsentRequest request) {
+    public ConsentResponse create(
+            @Valid @RequestBody CreateConsentRequest request,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        var loggedUserCpf = jwt.getSubject(); // vem do token
         var consent = createConsentUseCase.execute(
-                request.loggedUserCpf(),
+                loggedUserCpf,
                 request.businessEntityCnpj(),
                 request.permissions(),
                 request.expirationDateTime()
