@@ -57,3 +57,9 @@ logging:
   level:
     br.com.nevvesdev: DEBUG
     org.springframework.security: DEBUG
+
+banks:
+  bank-a:
+    base-url: https://localhost:8080
+  bank-b:
+    base-url: https://localhost:8080

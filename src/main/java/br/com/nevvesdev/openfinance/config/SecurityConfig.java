@@ -31,6 +31,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/consents/*/extends").hasAuthority(ConsentScope.CONSENTS_WRITE)
                         // Consultas exigem escopo de leitura
                         .requestMatchers(HttpMethod.GET, "/consents/**").hasAuthority(ConsentScope.CONSENTS_READ)
+                        .requestMatchers(HttpMethod.GET, "/aggregation/**").hasAuthority(ConsentScope.CONSENTS_READ)
+                        .requestMatchers("/mock/**").permitAll() // mock banks liberados
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
