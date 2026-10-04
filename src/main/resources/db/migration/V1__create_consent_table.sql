@@ -16,7 +16,7 @@ CREATE TABLE consent_permissions (
 
 CREATE TABLE consent_events (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    consent_id  UUID        NOT NULL REFERENCES consents(id),
+    consent_id  UUID        NOT NULL REFERENCES consents(id) ON DELETE CASCADE,
     previous_status VARCHAR(30),
     new_status  VARCHAR(30)  NOT NULL,
     reason      VARCHAR(255),

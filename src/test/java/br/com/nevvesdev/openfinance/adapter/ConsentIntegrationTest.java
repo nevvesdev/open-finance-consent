@@ -1,6 +1,7 @@
 package br.com.nevvesdev.openfinance.adapter;
 
 import br.com.nevvesdev.openfinance.adapter.out.persistence.repository.ConsentJpaRepository;
+import br.com.nevvesdev.openfinance.adapter.out.persistence.repository.ConsentEventJpaRepository;
 import br.com.nevvesdev.openfinance.domain.consent.ConsentPermission;
 import br.com.nevvesdev.openfinance.domain.consent.ConsentStatus;
 import tools.jackson.databind.ObjectMapper;
@@ -36,8 +37,12 @@ class ConsentIntegrationTest {
     @Autowired
     ConsentJpaRepository consentJpaRepository;
 
+    @Autowired
+    br.com.nevvesdev.openfinance.adapter.out.persistence.repository.ConsentEventJpaRepository consentEventJpaRepository;
+
     @BeforeEach
     void setUp() {
+        consentEventJpaRepository.deleteAll();
         consentJpaRepository.deleteAll();
     }
 
