@@ -24,23 +24,23 @@ Este serviço expõe um fluxo completo de consentimento para dados financeiros, 
 
 ```mermaid
 graph TD
-    A[Cliente] -->|POST /auth/token| B[TokenController]
-    B -->|gera JWT RS256| C[JwtTokenIssuer]
-    C -->|assina com chave privada| D[JWT]
-    D -->|valida no resource server| E[SecurityConfig]
+    A[Cliente] -->|"POST /auth/token"| B[TokenController]
+    B -->|"gera JWT RS256"| C[JwtTokenIssuer]
+    C -->|"assina com chave privada"| D[JWT]
+    D -->|"valida no resource server"| E[SecurityConfig]
 
-    A -->|POST /consents| F[ConsentController]
-    F -->|cria aggregate| G[CreateConsentUseCase]
-    G -->|salva consent| H[ConsentRepository]
-    H -->|emite eventos| I[ConsentEventPublisher]
+    A -->|"POST /consents"| F[ConsentController]
+    F -->|"cria aggregate"| G[CreateConsentUseCase]
+    G -->|"salva consent"| H[ConsentRepository]
+    H -->|"emite eventos"| I[ConsentEventPublisher]
 
-    A -->|GET /aggregation/consents/{id}/data| J[AggregationController]
-    J -->|valida status e escopo| K[AggregateAccountsUseCase]
-    K -->|consulta bancos| L[BankClient]
-    L -->|Conta / Cartão| M[Mock Bank A / Mock Bank B]
+    A -->|"GET /aggregation/consents/:id/data"| J[AggregationController]
+    J -->|"valida status e escopo"| K[AggregateAccountsUseCase]
+    K -->|"consulta bancos"| L[BankClient]
+    L -->|"Conta / Cartão"| M[Mock Banks]
 
-    N[Scheduled Job] -->|a cada 60s| O[ExpireConsentsJob]
-    O -->|expira consentimento| H
+    N[Scheduled Job] -->|"a cada 60s"| O[ExpireConsentsJob]
+    O -->|"expira consentimento"| H
 ```
 
 ---
@@ -384,15 +384,13 @@ src/main/java/
 
 ---
 
-## Licença
+## 👨‍💻 Desenvolvido por
 
-MIT
+João Victor · [GitHub](https://github.com/nevvesdev) · [LinkedIn](https://www.linkedin.com/in/nevvesdev/)
 
 ---
 
-## Autor
 
-João Victor
+## 📄 Licença
 
-GitHub: https://github.com/nevvesdev
-LinkedIn: https://www.linkedin.com/in/nevvesdev/
+MIT License — Veja `LICENSE` para detalhes.
